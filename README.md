@@ -29,6 +29,14 @@ The application lets users define locations (via latitude/longitude) and metrics
 
 This project is under active development. The application structure (configuration, logging, tooling) is currently being set up before the database layer and API routes are implemented. A detailed "Getting Started" section will be added here once the initial setup is stable enough for others to run the project locally.
 
+## Getting-Started
+
+### Requires
+- uv (>=0.9.8)
+
+### Run
+- run uv sync in project root
+
 ## Author
 
 Yannik Krantz

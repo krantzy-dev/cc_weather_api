@@ -1,0 +1,11 @@
+.venv
+.git
+.gitignore
+.env
+.vscode
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+README.md
+k8s/
