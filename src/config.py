@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     app_host: str = "0.0.0.0"
     app_port: int = 8000
 
+    # Logging
+    log_level: str | None = None
+
     # Database (split so each part can be injected separately in K8s)
     postgres_user: str
     postgres_password: str
@@ -37,6 +40,13 @@ class Settings(BaseSettings):
             f"postgresql+psycopg://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
+    
+    @property
+    def effective_log_level(self) -> str:
+        """Return the configured log level, or a sensible default per environment."""
+        if self.log_level is not None:
+            return self.log_level.upper()
+        return "DEBUG" if self.environment is Environment.DEVELOPMENT else "INFO"
 
     @property
     def is_production(self) -> bool:
