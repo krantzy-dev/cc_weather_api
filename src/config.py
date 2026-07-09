@@ -1,8 +1,10 @@
 from enum import StrEnum
 from functools import lru_cache
+from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 class Environment(StrEnum):
     DEVELOPMENT = "development"
@@ -23,9 +25,10 @@ class Settings(BaseSettings):
     # Application server
     app_host: str = "0.0.0.0"
     app_port: int = 8000
+    reload: bool = True  # Only use in development mode
 
     # Logging
-    log_level: str | None = None
+    log_level: LogLevel | None = None
 
     # Database (split so each part can be injected separately in K8s)
     postgres_user: str
