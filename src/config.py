@@ -1,4 +1,3 @@
-# src/config.py
 from enum import StrEnum
 from functools import lru_cache
 
