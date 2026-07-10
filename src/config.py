@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
+
 class Environment(StrEnum):
     DEVELOPMENT = "development"
     TESTING = "testing"
@@ -43,7 +44,7 @@ class Settings(BaseSettings):
             f"postgresql+psycopg://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
-    
+
     @property
     def effective_log_level(self) -> str:
         """Return the configured log level, or a sensible default per environment."""
