@@ -35,7 +35,8 @@ This project is under active development. The application structure (configurati
 - uv (>=0.9.8)
 
 ### Run
-- run uv sync in project root
+- run `uv sync` in project root
+- run `uv run pre-commit install` and `uv run pre-commit run -- all-files` in project root once
 
 ## Author
 
