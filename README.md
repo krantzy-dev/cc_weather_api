@@ -38,6 +38,7 @@ This project is under active development. The application structure (configurati
 - run `uv sync` in project root
 - run `uv run pre-commit install` and `uv run pre-commit run -- all-files` in project root once
 - copy `.env.example` as `.env` and assign desired variable values
+- copy `secret.example.yaml` as `secret.yaml` and assign desired variable values
 
 ## Author
 
