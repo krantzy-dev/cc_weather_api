@@ -38,7 +38,11 @@ This project is under active development. The application structure (configurati
 - run `uv sync` in project root
 - run `uv run pre-commit install` and `uv run pre-commit run -- all-files` in project root once
 - copy `.env.example` as `.env` and assign desired variable values
-- copy `secret.example.yaml` as `secret.yaml` and assign desired variable values
+- copy `k8s/example/secret.example.yaml` as `k8s/secret.yaml` and assign desired variable values
+- run `kind create cluster --config kind-config.yaml`
+- run `kubectl apply -f k8s/`
+- run `kubectl port-forward svc/weather-api 8000:8000`
+- API is now reachable at `http://localhost:8000`
 
 ## Author
 
