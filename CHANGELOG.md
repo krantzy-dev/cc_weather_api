@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/krantzy-dev/cc_weather_api/compare/v0.2.1...v0.2.2) (2026-07-10)
+
+
+### Bug Fixes
+
+* **infra:** add sync-uv-lock workflow for automatic uv.lock synchronization ([8ee4845](https://github.com/krantzy-dev/cc_weather_api/commit/8ee4845d0f0fd4e37ac49932f628faf47164b8b6))
+
 ## [0.2.1](https://github.com/krantzy-dev/cc_weather_api/compare/v0.2.0...v0.2.1) (2026-07-10)
 
 
