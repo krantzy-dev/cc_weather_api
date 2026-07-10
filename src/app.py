@@ -1,5 +1,6 @@
-from fastapi import FastAPI
 from importlib.metadata import PackageNotFoundError, version
+
+from fastapi import FastAPI
 
 try:
     app_version = version("weather-api")
