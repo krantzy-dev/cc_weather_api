@@ -1,5 +1,6 @@
 from enum import StrEnum
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -46,6 +47,17 @@ class Settings(BaseSettings):
         )
 
     @property
+    def test_db_name(self) -> str:
+        return self.postgres_db + "_test"
+
+    @property
+    def test_db_url(self) -> str:
+        return (
+            f"postgresql+psycopg://{self.postgres_user}:{self.postgres_password}"
+            f"@{self.postgres_host}:{self.postgres_port}/{self.test_db_name}"
+        )
+
+    @property
     def effective_log_level(self) -> str:
         """Return the configured log level, or a sensible default per environment."""
         if self.log_level is not None:
@@ -55,6 +67,10 @@ class Settings(BaseSettings):
     @property
     def is_production(self) -> bool:
         return self.environment is Environment.PRODUCTION
+
+    @property
+    def root_dir(self) -> Path:
+        return Path(__file__).parent.parent
 
 
 @lru_cache
