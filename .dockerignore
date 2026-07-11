@@ -1,7 +1,7 @@
 .venv
 .git
 .gitignore
-.env
+secret/
 .vscode
 __pycache__
 *.pyc
@@ -9,3 +9,8 @@ __pycache__
 .ruff_cache
 README.md
 k8s/
+kind-config.yaml
+tests/
+.pre-commit-config.yaml
+release-please-config.json
+.release-please-manifest.json

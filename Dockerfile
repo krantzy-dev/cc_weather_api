@@ -27,6 +27,8 @@ RUN groupadd --system app && useradd --system --gid app app
 WORKDIR /app
 
 COPY --from=builder --chown=app:app /app /app
+COPY --chown=app:app entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 ENV PATH="/app/.venv/bin:$PATH"
 
@@ -34,4 +36,4 @@ USER app
 
 EXPOSE 8000
 
-CMD ["python", "main.py"]
+ENTRYPOINT ["./entrypoint.sh"]
