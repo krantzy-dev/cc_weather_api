@@ -29,18 +29,22 @@ The application lets users define locations (via latitude/longitude) and metrics
 
 This project is under active development. The application structure (configuration, logging, tooling) is currently being set up before the database layer and API routes are implemented. A detailed "Getting Started" section will be added here once the initial setup is stable enough for others to run the project locally.
 
-## Getting-Started
+## Getting Started
 
 ### Requires
 - uv (>=0.9.8)
+- Docker
+- kind
+- kubectl
 
 ### Run
-- run `uv sync` in project root
-- run `uv run pre-commit install` and `uv run pre-commit run -- all-files` in project root once
-- copy `secret/.env.example` as `secret/.env` and assign desired variable values. They will be used by k8s and the python project alike when you run as dev
-- run `kind create cluster --config kind-config.yaml`
-- run `kubectl apply -k k8s/overlays/dev`
-- API is now reachable at `http://localhost:8000`
+1. Run `uv sync` in the project root
+2. Run `uv run pre-commit install` and `uv run pre-commit run --all-files` once
+3. Copy `secret/.env.example` to `secret/.env` and set the desired values. These are used by both the Python project (locally) and by Kustomize's `secretGenerator` when deploying to `dev`
+4. Run `kind create cluster --config kind-config.yaml`
+5. Run `kubectl apply -k k8s/overlays/dev`
+6. Run `uv run alembic upgrade head` to apply database migrations
+7. The API is now reachable at `http://localhost:8000`
 
 ## Author
 
