@@ -7,7 +7,7 @@ nodes:
     image: kindest/node:v1.33.12
     extraPortMappings:
       # API port mapping
-      - containerPort: 30000
+      - containerPort: 30800
         hostPort: 8000
         protocol: TCP
       # Database port mapping (only needed for local development, specifically for Alembic migrations)
