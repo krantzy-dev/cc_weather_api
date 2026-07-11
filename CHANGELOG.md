@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.2.2...v0.3.0) (2026-07-11)
+
+
+### Features
+
+* **DB:** add SQLAlchemy models and initial Alembic migration ([6255677](https://github.com/krantzy-dev/cc_weather_api/commit/6255677f3dc936ef6699e824cbb9c8cd5c2196ed))
+* **health:** add health check endpoints for liveness and readiness ([a579d06](https://github.com/krantzy-dev/cc_weather_api/commit/a579d066484449f04fe593060122055edadf7c7a))
+* **test:** add pytest with initial fixtures for db sessions ([01e9ac4](https://github.com/krantzy-dev/cc_weather_api/commit/01e9ac443606bbfbd9bb52de6201862fbbbc0b19))
+
 ## [0.2.2](https://github.com/krantzy-dev/cc_weather_api/compare/v0.2.1...v0.2.2) (2026-07-10)
 
 
