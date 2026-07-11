@@ -3,9 +3,10 @@ kind: Service
 metadata:
   name: weather-api
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: weather-api
   ports:
     - port: 8000
       targetPort: 8000
+      nodePort: 30000
