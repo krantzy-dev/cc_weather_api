@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+# I assume that in production secrets are managed directly via kubectl create secret, in ci/cd pipelines, or by an external secret manager. 
+# We don't generate a secret from the .env file in production. 
+# To see the variables needed in production, check the .env.example file in the root of the project.
