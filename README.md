@@ -39,8 +39,7 @@ This project is under active development. The application structure (configurati
 - run `uv run pre-commit install` and `uv run pre-commit run -- all-files` in project root once
 - copy `secret/.env.example` as `secret/.env` and assign desired variable values. They will be used by k8s and the python project alike when you run as dev
 - run `kind create cluster --config kind-config.yaml`
-- run `kubectl apply -f k8s/`
-- run `kubectl port-forward svc/weather-api 8000:8000`
+- run `kubectl apply -k k8s/overlays/dev`
 - API is now reachable at `http://localhost:8000`
 
 ## Author

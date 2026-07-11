@@ -5,3 +5,12 @@ name: weather-api
 nodes:
   - role: control-plane
     image: kindest/node:v1.33.12
+    extraPortMappings:
+      # API port mapping
+      - containerPort: 30000
+        hostPort: 8000
+        protocol: TCP
+      # Database port mapping (only needed for local development, specifically for Alembic migrations)
+      - containerPort: 30001
+        hostPort: 5432
+        protocol: TCP
