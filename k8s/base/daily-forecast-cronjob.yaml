@@ -15,4 +15,9 @@ spec:
               envFrom:
                 - secretRef:
                     name: weather-api-secret
+              env:
+                - name: POSTGRES_HOST
+                  value: weather-api-postgres
+                - name: POSTGRES_PORT
+                  value: "5432"
           restartPolicy: OnFailure

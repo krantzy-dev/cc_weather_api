@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import and_, func, insert, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session, aliased
 
 from src.models import Measurement
@@ -126,5 +127,32 @@ def bulk_create(db: Session, rows: list[dict]) -> int:
     if not rows:
         return 0
     db.execute(insert(Measurement), rows)
+    db.commit()
+    return len(rows)
+
+
+def upsert_many(db: Session, rows: list[dict]) -> int:
+    """Insert measurement rows, updating the value if the row already exists.
+
+    Conflict is detected on (location_id, metric_id, ts_value,
+    forecast_horizon); on conflict, only `value` is updated.
+
+    Args:
+        db: Database session.
+        rows: Dicts with location_id, metric_id, ts_value, ts_created,
+            forecast_horizon, and value.
+
+    Returns:
+        The number of rows processed (inserted or updated).
+    """
+    if not rows:
+        return 0
+
+    stmt = pg_insert(Measurement).values(rows)
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["location_id", "metric_id", "ts_value", "forecast_horizon"],
+        set_={"value": stmt.excluded.value, "ts_created": stmt.excluded.ts_created},
+    )
+    db.execute(stmt)
     db.commit()
     return len(rows)
