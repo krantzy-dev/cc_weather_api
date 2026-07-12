@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine, event, text
+from sqlalchemy.orm import Session, sessionmaker
 
 from src.app import app
 from src.config import settings
@@ -38,17 +38,23 @@ def engine():
 
 @pytest.fixture
 def db_session(engine):
-    """
-    Provide a session bound to a transaction that is rolled back after the test.
-    """
+    """Provide a session isolated via a SAVEPOINT that survives commits in route code."""
     connection = engine.connect()
-    transaction = connection.begin()
+    outer_transaction = connection.begin()
     session = sessionmaker(bind=connection)()
+
+    nested = connection.begin_nested()
+
+    @event.listens_for(session, "after_transaction_end")
+    def restart_savepoint(session: Session, transaction) -> None:
+        nonlocal nested
+        if not nested.is_active:
+            nested = connection.begin_nested()
 
     yield session
 
     session.close()
-    transaction.rollback()
+    outer_transaction.rollback()
     connection.close()
 
 
