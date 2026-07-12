@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.6.0...v0.7.0) (2026-07-12)
+
+
+### Features
+
+* **measurements:** add measurements routes and repository functions for data retrieval ([1199500](https://github.com/krantzy-dev/cc_weather_api/commit/119950037ac65571b8743a44def8e29446877490))
+
 ## [0.6.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.5.0...v0.6.0) (2026-07-12)
 
 
