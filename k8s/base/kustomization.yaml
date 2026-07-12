@@ -6,3 +6,4 @@ resources:
   - service.yaml
   - postgres-statefulset.yaml
   - postgres-service.yaml
+  - hourly-ingest-cronjob.yaml
