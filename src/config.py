@@ -39,6 +39,14 @@ class Settings(BaseSettings):
     postgres_port: int = 5432
     postgres_db: str
 
+    # Auth
+    jwt_secret_key: str
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 30
+
+    # Optional pepper, applied on top of Argon2 itself
+    auth_pepper: str = ""
+
     @property
     def database_url(self) -> str:
         return (
