@@ -1,5 +1,6 @@
+import tomllib
 from contextlib import asynccontextmanager
-from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
 
 from fastapi import FastAPI
 
@@ -24,18 +25,25 @@ async def lifespan(app: FastAPI):
     yield
 
 
-try:
-    app_version = version("weather-api")
-except PackageNotFoundError:
-    app_version = "0.0.0-dev"
+def get_app_version() -> str:
+    pyproject_path = Path(__file__).parent.parent / "pyproject.toml"
+    try:
+        with pyproject_path.open("rb") as f:
+            data = tomllib.load(f)
+        return data["project"]["version"]
+    except (FileNotFoundError, KeyError):
+        return "0.0.0-dev"
+
+
+app_version = get_app_version()
 
 app = FastAPI(
     title="Weather API", description="A simple weather API", version=app_version, lifespan=lifespan
 )
 app.include_router(location_router)
-app.include_router(health_router)
-app.include_router(auth_router)
 app.include_router(metric_router)
 app.include_router(measurement_router)
+app.include_router(auth_router)
+app.include_router(health_router)
 
 register_exception_handlers(app)
