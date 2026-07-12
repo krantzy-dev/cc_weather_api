@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
             - name: hourly-ingest
-              image: ghcr.io/krantzy-dev/cc_weather_api:v0.9.0
+              image: ghcr.io/krantzy-dev/cc_weather_api:v0.9.1
               command: ["python", "-m", "src.load_data.hourly_ingest"]
               envFrom:
                 - secretRef:
