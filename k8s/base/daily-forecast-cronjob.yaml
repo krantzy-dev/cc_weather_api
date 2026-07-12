@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weather-api-daily-forecast-ingest
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: daily-forecast-ingest
+              image: ghcr.io/krantzy-dev/cc_weather_api:v0.7.0
+              command: ["python", "-m", "src.load_data.daily_forecast_ingest"]
+              envFrom:
+                - secretRef:
+                    name: weather-api-secret
+          restartPolicy: OnFailure
