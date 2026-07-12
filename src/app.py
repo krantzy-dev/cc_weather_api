@@ -29,7 +29,9 @@ try:
 except PackageNotFoundError:
     app_version = "0.0.0-dev"
 
-app = FastAPI(title="Weather API", description="A simple weather API", version=app_version)
+app = FastAPI(
+    title="Weather API", description="A simple weather API", version=app_version, lifespan=lifespan
+)
 app.include_router(location_router)
 app.include_router(health_router)
 app.include_router(auth_router)
