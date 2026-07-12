@@ -21,3 +21,12 @@ class InvalidCredentialsError(Exception):
 
 class InvalidTokenError(Exception):
     """Raised when a bearer token is missing, malformed, or expired."""
+
+
+class UnsupportedMetricError(Exception):
+    """Raised when a metric name is not a recognized Open-Meteo hourly variable."""
+
+    def __init__(self, name: str, reason: str) -> None:
+        self.name = name
+        self.reason = reason
+        super().__init__(f"'{name}' is not a supported metric: {reason}")
