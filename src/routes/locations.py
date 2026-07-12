@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database import get_db
-from src.models import Location
+from src.dependencies import get_current_user
+from src.models import Location, User
 from src.repositories import location_repository
 from src.schemas.location import LocationCreate, LocationRead, LocationUpdate
 from src.services.location_service import ensure_location_is_far_enough
@@ -18,7 +19,11 @@ NOT_FOUND_RESPONSE = {404: {"description": "Location not found"}}
     status_code=201,
     responses={409: {"description": "Location too close to an existing one"}},
 )
-def create_location(payload: LocationCreate, db: Session = Depends(get_db)) -> Location:
+def create_location(
+    payload: LocationCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> Location:
     """Create a new location with the given name and coordinates."""
     existing_coordinates = location_repository.list_coordinates(db)
     ensure_location_is_far_enough(payload.lat, payload.lon, existing_coordinates)
@@ -43,7 +48,10 @@ def get_location(location_id: int, db: Session = Depends(get_db)) -> Location:
 
 @router.patch("/{location_id}", response_model=LocationRead, responses=NOT_FOUND_RESPONSE)
 def update_location(
-    location_id: int, payload: LocationUpdate, db: Session = Depends(get_db)
+    location_id: int,
+    payload: LocationUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> Location:
     """Update a location's name.
 
@@ -59,7 +67,9 @@ def update_location(
 
 
 @router.delete("/{location_id}", status_code=204, responses=NOT_FOUND_RESPONSE)
-def delete_location(location_id: int, db: Session = Depends(get_db)) -> None:
+def delete_location(
+    location_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+) -> None:
     """Delete a location.
 
     Associated measurements are not currently deleted along with the

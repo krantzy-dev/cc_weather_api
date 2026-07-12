@@ -1,9 +1,9 @@
 from src.models import Location
 
 
-def test_create_location_returns_created_resource(client):
+def test_create_location_returns_created_resource(authenticated_client):
     """POST /locations should return the newly created location with an ID."""
-    response = client.post(
+    response = authenticated_client.post(
         "/locations",
         json={"name": "Bir Tawil", "lat": 21.8710, "lon": 33.7511},
     )
@@ -48,34 +48,36 @@ def test_get_location_not_found(client):
     assert response.status_code == 404
 
 
-def test_update_location_name(seeded_client, seeded_db):
+def test_update_location_name(seed_authenticated_client, seeded_db):
     """PATCH /locations/{id} should update the location's name."""
     location = seeded_db.query(Location).filter_by(name="Point Nemo").one()
 
-    response = seeded_client.patch(f"/locations/{location.id}", json={"name": "Point Nemo Renamed"})
+    response = seed_authenticated_client.patch(
+        f"/locations/{location.id}", json={"name": "Point Nemo Renamed"}
+    )
 
     assert response.status_code == 200
     assert response.json()["name"] == "Point Nemo Renamed"
 
 
-def test_update_location_not_found(client):
+def test_update_location_not_found(authenticated_client):
     """PATCH /locations/{id} should 404 for a non-existent ID."""
-    response = client.patch("/locations/999", json={"name": "does not matter"})
+    response = authenticated_client.patch("/locations/999", json={"name": "does not matter"})
     assert response.status_code == 404
 
 
-def test_delete_location(seeded_client, seeded_db):
+def test_delete_location(seed_authenticated_client, seeded_db):
     """DELETE /locations/{id} should remove the location."""
     location = seeded_db.query(Location).filter_by(name="McMurdo Station").one()
 
-    response = seeded_client.delete(f"/locations/{location.id}")
+    response = seed_authenticated_client.delete(f"/locations/{location.id}")
     assert response.status_code == 204
 
-    follow_up = seeded_client.get(f"/locations/{location.id}")
+    follow_up = seed_authenticated_client.get(f"/locations/{location.id}")
     assert follow_up.status_code == 404
 
 
-def test_delete_location_not_found(client):
+def test_delete_location_not_found(authenticated_client):
     """DELETE /locations/{id} should 404 for a non-existent ID."""
-    response = client.delete("/locations/999")
+    response = authenticated_client.delete("/locations/999")
     assert response.status_code == 404

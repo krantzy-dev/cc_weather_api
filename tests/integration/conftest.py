@@ -95,3 +95,31 @@ def seeded_client(seeded_db):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def authenticated_client(client):
+    """Provide a TestClient with a valid bearer token already registered."""
+    client.post(
+        "/auth/register", json={"email": "authtest@example.com", "password": "supersecret123"}
+    )
+    response = client.post(
+        "/auth/login", data={"username": "authtest@example.com", "password": "supersecret123"}
+    )
+    token = response.json()["access_token"]
+    client.headers.update({"Authorization": f"Bearer {token}"})
+    return client
+
+
+@pytest.fixture
+def seed_authenticated_client(seeded_client):
+    """Provide a TestClient with a valid bearer token already registered."""
+    seeded_client.post(
+        "/auth/register", json={"email": "authtest@example.com", "password": "supersecret123"}
+    )
+    response = seeded_client.post(
+        "/auth/login", data={"username": "authtest@example.com", "password": "supersecret123"}
+    )
+    token = response.json()["access_token"]
+    seeded_client.headers.update({"Authorization": f"Bearer {token}"})
+    return seeded_client
