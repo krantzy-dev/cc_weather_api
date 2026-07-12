@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.4...v0.9.0) (2026-07-12)
+
+
+### Features
+
+* **db:** add offline loading capabilities ([cbc2205](https://github.com/krantzy-dev/cc_weather_api/commit/cbc22053e216d6630b008aafe5a56fca53626612))
+
 ## [0.8.4](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.3...v0.8.4) (2026-07-12)
 
 
