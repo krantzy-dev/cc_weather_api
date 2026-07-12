@@ -47,6 +47,8 @@ class Settings(BaseSettings):
     # Optional pepper, applied on top of Argon2 itself
     auth_pepper: str = ""
 
+    online: bool = True
+
     @property
     def database_url(self) -> str:
         return (
