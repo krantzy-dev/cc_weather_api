@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 
 from src.config import settings
 from src.database import SessionLocal
@@ -9,12 +10,12 @@ from src.repositories import location_repository, measurement_repository, metric
 logger = logging.getLogger(__name__)
 
 
-def run_daily_forecast_ingest() -> None:
+def run_daily_forecast_ingest(reference_time: datetime | None = None) -> None:
     """Fetch forecast data for the next FORECAST_DAYS days, for every location/metric pair.
 
-    Only forecast rows (forecast_horizon > 0) are kept; the current hour's
-    actual value is handled separately by the hourly ingest job. Each day's
-    run preserves its own ts_created, building up forecast history over time.
+    Args:
+        reference_time: Override for "now", used only to simulate past runs
+            for demo/testing purposes. Defaults to the real current time.
     """
     db = SessionLocal()
     try:
@@ -34,7 +35,7 @@ def run_daily_forecast_ingest() -> None:
                 past_days=0,
                 forecast_days=settings.forecast_days,
             )
-            rows = parse_hourly_response(response, metric_ids_by_name)
+            rows = parse_hourly_response(response, metric_ids_by_name, now=reference_time)
             forecast_rows = [row for row in rows if row["forecast_horizon"] > 0]
 
             for row in forecast_rows:
