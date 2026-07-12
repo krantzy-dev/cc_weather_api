@@ -2,6 +2,7 @@ from importlib.metadata import PackageNotFoundError, version
 
 from fastapi import FastAPI
 
+from src.exception_handlers import register_exception_handlers
 from src.routes.health import router as health_router
 from src.routes.locations import router as location_router
 
@@ -13,3 +14,5 @@ except PackageNotFoundError:
 app = FastAPI(title="Weather API", description="A simple weather API", version=app_version)
 app.include_router(location_router)
 app.include_router(health_router)
+
+register_exception_handlers(app)

@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database import get_db
-from src.exceptions import LocationTooCloseError
 from src.models import Location
 from src.repositories import location_repository
 from src.schemas.location import LocationCreate, LocationRead, LocationUpdate
@@ -10,16 +9,20 @@ from src.services.location_service import ensure_location_is_far_enough
 
 router = APIRouter(prefix="/locations", tags=["locations"])
 
+NOT_FOUND_RESPONSE = {404: {"description": "Location not found"}}
 
-@router.post("", response_model=LocationRead, status_code=201)
+
+@router.post(
+    "",
+    response_model=LocationRead,
+    status_code=201,
+    responses={409: {"description": "Location too close to an existing one"}},
+)
 def create_location(payload: LocationCreate, db: Session = Depends(get_db)) -> Location:
     """Create a new location with the given name and coordinates."""
     existing_coordinates = location_repository.list_coordinates(db)
+    ensure_location_is_far_enough(payload.lat, payload.lon, existing_coordinates)
 
-    try:
-        ensure_location_is_far_enough(payload.lat, payload.lon, existing_coordinates)
-    except LocationTooCloseError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
     return location_repository.create(db, payload.name, payload.lat, payload.lon)
 
 
@@ -29,7 +32,7 @@ def list_locations(db: Session = Depends(get_db)) -> list[Location]:
     return location_repository.list_all(db)
 
 
-@router.get("/{location_id}", response_model=LocationRead)
+@router.get("/{location_id}", response_model=LocationRead, responses=NOT_FOUND_RESPONSE)
 def get_location(location_id: int, db: Session = Depends(get_db)) -> Location:
     """Retrieve a single location by its ID."""
     location = location_repository.get(db, location_id=location_id)
@@ -38,7 +41,7 @@ def get_location(location_id: int, db: Session = Depends(get_db)) -> Location:
     return location
 
 
-@router.patch("/{location_id}", response_model=LocationRead)
+@router.patch("/{location_id}", response_model=LocationRead, responses=NOT_FOUND_RESPONSE)
 def update_location(
     location_id: int, payload: LocationUpdate, db: Session = Depends(get_db)
 ) -> Location:
@@ -55,7 +58,7 @@ def update_location(
     return location_repository.update_name(db, location, payload.name)
 
 
-@router.delete("/{location_id}", status_code=204)
+@router.delete("/{location_id}", status_code=204, responses=NOT_FOUND_RESPONSE)
 def delete_location(location_id: int, db: Session = Depends(get_db)) -> None:
     """Delete a location.
 
