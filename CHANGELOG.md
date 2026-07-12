@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.8.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.7.0...v0.8.0) (2026-07-12)
+
+
+### Features
+
+* **API:** add backfill for measurements when new metrics or locations are added ([e2255c5](https://github.com/krantzy-dev/cc_weather_api/commit/e2255c558bc5600536c7d17bb01c9c28210f091a))
+* **daily-forecast:** add daily forecast ingest cron job and implementation ([4604e36](https://github.com/krantzy-dev/cc_weather_api/commit/4604e36348baa1a6a4769ce0dc2127c25fb0762b))
+* **hourly-ingest:** add hourly ingest cron job and implementation ([fe96fc2](https://github.com/krantzy-dev/cc_weather_api/commit/fe96fc27e12acdeb61e68baa59b3f50ffcfa39b1))
+
 ## [0.7.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.6.0...v0.7.0) (2026-07-12)
 
 
