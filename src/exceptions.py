@@ -23,6 +23,14 @@ class InvalidTokenError(Exception):
     """Raised when a bearer token is missing, malformed, or expired."""
 
 
+class MetricAlreadyExistsError(Exception):
+    """Raised when attempting to create a metric with a name that already exists."""
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+        super().__init__(f"metric '{name}' already exists")
+
+
 class UnsupportedMetricError(Exception):
     """Raised when a metric name is not a recognized Open-Meteo hourly variable."""
 

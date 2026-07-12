@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from src.excetpions import MetricAlreadyExistsError
 
 from src.database import get_db
 from src.dependencies import get_current_user
@@ -29,6 +30,10 @@ def create_metric(
 ) -> Metric:
     """Create a new Metric with the given name and unit"""
     validate_metric_name(payload.name)
+
+    if metric_repository.get_by_name(db, payload.name) is not None:
+        raise MetricAlreadyExistsError(payload.name)
+
     return metric_repository.create(db, payload.name, payload.unit)
 
 

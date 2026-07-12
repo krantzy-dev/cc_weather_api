@@ -6,6 +6,7 @@ from src.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
     LocationTooCloseError,
+    MetricAlreadyExistsError,
     UnsupportedMetricError,
 )
 
@@ -42,6 +43,13 @@ async def invalid_token_handler(request: Request, exc: InvalidTokenError) -> JSO
     )
 
 
+async def metric_already_exists_handler(
+    request: Request, exc: MetricAlreadyExistsError
+) -> JSONResponse:
+    """Translate a MetricAlreadyExistsError into a 409 Conflict response."""
+    return JSONResponse(status_code=409, content={"detail": str(exc)})
+
+
 async def unsupported_metric_handler(request: Request, exc: UnsupportedMetricError) -> JSONResponse:
     """Translate an UnsupportedMetricError into a 422 Unprocessable Entity response."""
     return JSONResponse(status_code=422, content={"detail": str(exc)})
@@ -57,4 +65,5 @@ def register_exception_handlers(app: FastAPI) -> None:
     app.add_exception_handler(EmailAlreadyRegisteredError, email_already_registered_handler)
     app.add_exception_handler(InvalidCredentialsError, invalid_credentials_handler)
     app.add_exception_handler(InvalidTokenError, invalid_token_handler)
+    app.add_exception_handler(MetricAlreadyExistsError, unsupported_metric_handler)
     app.add_exception_handler(UnsupportedMetricError, unsupported_metric_handler)
