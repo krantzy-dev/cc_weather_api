@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from src.config import settings
 from src.load_data.backfill import backfill_location
+from src.load_data.offline_load import run_offline_load
 from src.repositories import location_repository, metric_repository
 
 logger = logging.getLogger(__name__)
@@ -26,12 +27,13 @@ def run_initial_load(db: Session) -> None:
     Args:
         db: Database session.
     """
-    if not settings.online:
-        logger.info("ONLINE=false, skipping initial data load")
-        return
-
     if location_repository.list_all(db):
         logger.info("locations already exist, skipping initial data load")
+        return
+
+    if not settings.online:
+        logger.info("ONLINE=false, loading offline backup")
+        run_offline_load(db)
         return
 
     for name, unit in INITIAL_METRICS:

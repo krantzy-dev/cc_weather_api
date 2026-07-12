@@ -45,6 +45,7 @@ This project is under active development. The application structure (configurati
 5. Run `kubectl apply -k k8s/overlays/dev`
 6. Run `uv run alembic upgrade head` to apply database migrations
 7. The API is now reachable at `http://localhost:8000`
+8. In case dummy data is needed for functionality of certain routes run `uv run python -m scripts.simulate_forecast_history --days-back 10`
 
 ## Author
 
