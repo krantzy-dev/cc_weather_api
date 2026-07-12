@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.excetpions import MetricAlreadyExistsError
 
 from src.database import get_db
 from src.dependencies import get_current_user
+from src.exceptions import MetricAlreadyExistsError
 from src.models import Metric, User
 from src.repositories import metric_repository
 from src.schemas.metric import MetricCreate, MetricRead
