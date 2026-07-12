@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.2](https://github.com/krantzy-dev/cc_weather_api/compare/v0.9.1...v0.9.2) (2026-07-12)
+
+
+### Bug Fixes
+
+* version bump ([f85d03c](https://github.com/krantzy-dev/cc_weather_api/commit/f85d03c4aa4b843b88723fde324aa18aeef4e0f9))
+
+
+### Documentation
+
+* update README to clarify data ingestion and features, improve historical data note ([1e12d1a](https://github.com/krantzy-dev/cc_weather_api/commit/1e12d1a69f11c2d1c931467dc3935afb6b479ad1))
+
 ## [0.9.1](https://github.com/krantzy-dev/cc_weather_api/compare/v0.9.0...v0.9.1) (2026-07-12)
 
 
