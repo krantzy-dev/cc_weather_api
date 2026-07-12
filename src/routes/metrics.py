@@ -20,3 +20,9 @@ def create_metric(
 ) -> Metric:
     """Create a new Metric with the given name and unit"""
     return metric_repository.create(db, payload.name, payload.unit)
+
+
+@router.get("", response_model=list[MetricRead])
+def list_metrics(db: Session = Depends(get_db)) -> list[Metric]:
+    """List all locations currently stored."""
+    return metric_repository.list_all(db)
