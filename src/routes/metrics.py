@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.config import settings
 from src.database import get_db
 from src.dependencies import get_current_user
 from src.exceptions import MetricAlreadyExistsError
+from src.load_data.backfill import backfill_metric
 from src.models import Metric, User
-from src.repositories import metric_repository
+from src.repositories import location_repository, metric_repository
 from src.schemas.metric import MetricCreate, MetricRead
 from src.services.metric_validation import validate_metric_name
 
@@ -34,7 +36,13 @@ def create_metric(
     if metric_repository.get_by_name(db, payload.name) is not None:
         raise MetricAlreadyExistsError(payload.name)
 
-    return metric_repository.create(db, payload.name, payload.unit)
+    metric = metric_repository.create(db, payload.name, payload.unit)
+
+    locations = location_repository.list_with_coordinates(db)
+    if locations:
+        backfill_metric(db, metric.id, metric.name, locations, settings.forecast_days)
+
+    return metric
 
 
 @router.get("", response_model=list[MetricRead])
