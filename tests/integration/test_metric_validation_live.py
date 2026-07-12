@@ -1,7 +1,12 @@
 import pytest
 
+from src.config import settings
 from src.exceptions import UnsupportedMetricError
 from src.services.metric_validation import _validate_format
+
+pytestmark = pytest.mark.skipif(
+    not settings.online, reason="ONLINE=false, skipping live Open-Meteo checks"
+)
 
 
 def test_validate_format_accepts_known_metric():

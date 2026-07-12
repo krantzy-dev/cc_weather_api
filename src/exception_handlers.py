@@ -6,6 +6,7 @@ from src.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
     LocationTooCloseError,
+    UnsupportedMetricError,
 )
 
 
@@ -41,6 +42,11 @@ async def invalid_token_handler(request: Request, exc: InvalidTokenError) -> JSO
     )
 
 
+async def unsupported_metric_handler(request: Request, exc: UnsupportedMetricError) -> JSONResponse:
+    """Translate an UnsupportedMetricError into a 422 Unprocessable Entity response."""
+    return JSONResponse(status_code=422, content={"detail": str(exc)})
+
+
 def register_exception_handlers(app: FastAPI) -> None:
     """Register all custom domain exception handlers on the given app.
 
@@ -51,3 +57,4 @@ def register_exception_handlers(app: FastAPI) -> None:
     app.add_exception_handler(EmailAlreadyRegisteredError, email_already_registered_handler)
     app.add_exception_handler(InvalidCredentialsError, invalid_credentials_handler)
     app.add_exception_handler(InvalidTokenError, invalid_token_handler)
+    app.add_exception_handler(UnsupportedMetricError, unsupported_metric_handler)
