@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import and_, func, insert, select
 from sqlalchemy.orm import Session, aliased
 
 from src.models import Measurement
@@ -110,3 +110,21 @@ def list_by_ts(db: Session, ts_value: datetime) -> list[Measurement]:
         .order_by(Measurement.location_id, Measurement.metric_id, Measurement.forecast_horizon)
     )
     return db.execute(stmt).scalars().all()
+
+
+def bulk_create(db: Session, rows: list[dict]) -> int:
+    """Bulk insert measurement rows.
+
+    Args:
+        db: Database session.
+        rows: Dicts with location_id, metric_id, ts_value, ts_created,
+            forecast_horizon, and value.
+
+    Returns:
+        The number of rows inserted.
+    """
+    if not rows:
+        return 0
+    db.execute(insert(Measurement), rows)
+    db.commit()
+    return len(rows)

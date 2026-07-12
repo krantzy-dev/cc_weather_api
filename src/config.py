@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     auth_pepper: str = ""
 
     online: bool = True
+    forecast_days: int = 7
 
     @property
     def database_url(self) -> str:
