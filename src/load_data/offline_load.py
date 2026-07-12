@@ -29,7 +29,19 @@ def run_offline_load(db: Session) -> None:
         return
 
     sql = SAMPLE_DUMP_PATH.read_text()
-    statements = [s.strip() for s in sql.split(";") if s.strip() and not s.strip().startswith("--")]
+
+    sql_lines = [
+        line
+        for line in sql.splitlines()
+        if not line.strip().startswith("--") and not line.strip().startswith("\\")
+    ]
+    sql_without_comments = "\n".join(sql_lines)
+
+    statements = [
+        s.strip() for s in sql_without_comments.split(";") if s.strip() and "search_path" not in s
+    ]
+
+    db.execute(text("SET search_path TO public"))
 
     for statement in statements:
         db.execute(text(statement))
