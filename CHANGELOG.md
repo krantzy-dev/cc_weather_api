@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.5.0...v0.6.0) (2026-07-12)
+
+
+### Features
+
+* **metrics:** add metrics route, create operation and Integration test. Also add cascade delete to foreign keys for location and metric ([38e6fa5](https://github.com/krantzy-dev/cc_weather_api/commit/38e6fa526ba7194ef6607f3c02233f63bafde3e4))
+
 ## [0.5.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.4.0...v0.5.0) (2026-07-12)
 
 
