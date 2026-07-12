@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database import get_db
+from src.exceptions import LocationTooCloseError
 from src.models import Location
 from src.repositories import location_repository
 from src.schemas.location import LocationCreate, LocationRead, LocationUpdate
+from src.services.location_service import ensure_location_is_far_enough
 
 router = APIRouter(prefix="/locations", tags=["locations"])
 
@@ -12,7 +14,12 @@ router = APIRouter(prefix="/locations", tags=["locations"])
 @router.post("", response_model=LocationRead, status_code=201)
 def create_location(payload: LocationCreate, db: Session = Depends(get_db)) -> Location:
     """Create a new location with the given name and coordinates."""
+    existing_coordinates = location_repository.list_coordinates(db)
 
+    try:
+        ensure_location_is_far_enough(payload.lat, payload.lon, existing_coordinates)
+    except LocationTooCloseError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     return location_repository.create(db, payload.name, payload.lat, payload.lon)
 
 
