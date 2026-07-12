@@ -1,3 +1,6 @@
+from src.models import Metric
+
+
 def test_create_metric_returns_created_resource(authenticated_client):
     """POST /metrics should return the newly created metric with an ID."""
     response = authenticated_client.post(
@@ -26,3 +29,20 @@ def test_list_metrics_returns_seeded_data(seeded_client):
     assert response.status_code == 200
     names = {loc["name"] for loc in response.json()}
     assert names == {"temperature_2m", "cloud_cover"}
+
+
+def test_delete_metric(seed_authenticated_client, seeded_db):
+    """DELETE /metrics/{id} should remove the metric."""
+    metric = seeded_db.query(Metric).filter_by(name="temperature_2m").one()
+
+    response = seed_authenticated_client.delete(f"/metrics/{metric.id}")
+    assert response.status_code == 204
+
+    follow_up = seed_authenticated_client.get(f"/metrics/{metric.id}")
+    assert follow_up.status_code == 404
+
+
+def test_delete_metric_not_found(authenticated_client):
+    """DELETE /metrics/{id} should 404 for a non-existent ID."""
+    response = authenticated_client.delete("/metrics/999")
+    assert response.status_code == 404

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from src.database import get_db
@@ -24,5 +24,21 @@ def create_metric(
 
 @router.get("", response_model=list[MetricRead])
 def list_metrics(db: Session = Depends(get_db)) -> list[Metric]:
-    """List all locations currently stored."""
+    """List all metrics currently stored."""
     return metric_repository.list_all(db)
+
+
+@router.delete("/{metric_id}", status_code=204, responses=NOT_FOUND_RESPONSE)
+def delete_metric(
+    metric_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)
+) -> None:
+    """Delete a Metric.
+
+    Associated measurements are not currently deleted along with the
+    metric. Cascading deletion will be added once data ingestion is
+    implemented.
+    """
+    metric = metric_repository.get(db, metric_id=metric_id)
+    if metric is None:
+        raise HTTPException(status_code=404, detail="metric not found")
+    metric_repository.delete(db, metric)
