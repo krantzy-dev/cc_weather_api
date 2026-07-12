@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.4.0...v0.5.0) (2026-07-12)
+
+
+### Features
+
+* **locations:** integrate authentication into location routes and tests ([17164dd](https://github.com/krantzy-dev/cc_weather_api/commit/17164ddb432f3306fc383f21a320381c956169df))
+
 ## [0.4.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.3.0...v0.4.0) (2026-07-12)
 
 
