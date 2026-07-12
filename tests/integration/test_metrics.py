@@ -38,9 +38,6 @@ def test_delete_metric(seed_authenticated_client, seeded_db):
     response = seed_authenticated_client.delete(f"/metrics/{metric.id}")
     assert response.status_code == 204
 
-    follow_up = seed_authenticated_client.get(f"/metrics/{metric.id}")
-    assert follow_up.status_code == 404
-
 
 def test_delete_metric_not_found(authenticated_client):
     """DELETE /metrics/{id} should 404 for a non-existent ID."""

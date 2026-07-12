@@ -55,9 +55,7 @@ def update_location(
 ) -> Location:
     """Update a location's name.
 
-    Coordinates cannot be changed through this endpoint. Changing latitude
-    or longitude would conceptually describe a different location, so a new
-    location should be created instead.
+    Will trigger a cascading delete in measurements
     """
     location = location_repository.get(db, location_id=location_id)
     if location is None:
@@ -72,9 +70,7 @@ def delete_location(
 ) -> None:
     """Delete a location.
 
-    Associated measurements are not currently deleted along with the
-    location. Cascading deletion will be added once data ingestion is
-    implemented.
+    Will trigger a cascading delete in measurements
     """
     location = location_repository.get(db, location_id=location_id)
     if location is None:
