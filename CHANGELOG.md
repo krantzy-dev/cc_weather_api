@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.3.0...v0.4.0) (2026-07-12)
+
+
+### Features
+
+* **locations:** implement CRUD operations for locations with FastAPI ([30529cf](https://github.com/krantzy-dev/cc_weather_api/commit/30529cfb4478443d49406170409cbb3ca83fd66e))
+
 ## [0.3.0](https://github.com/krantzy-dev/cc_weather_api/compare/v0.2.2...v0.3.0) (2026-07-11)
 
 
