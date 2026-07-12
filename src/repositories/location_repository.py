@@ -17,6 +17,19 @@ def list_coordinates(db: Session) -> list[tuple[float, float]]:
     return [(row.lat, row.lon) for row in rows]
 
 
+def list_with_coordinates(db: Session) -> list[tuple[int, float, float]]:
+    """Retrieve (id, lat, lon) for all existing locations.
+
+    Args:
+        db: Database session.
+
+    Returns:
+        A list of (location_id, lat, lon) tuples.
+    """
+    rows = db.execute(select(Location.id, Location.lat, Location.lon)).all()
+    return [(row.id, row.lat, row.lon) for row in rows]
+
+
 def create(db: Session, name: str, lat: float, lon: float) -> Location:
     """Insert a new location.
 

@@ -1,13 +1,28 @@
+from contextlib import asynccontextmanager
 from importlib.metadata import PackageNotFoundError, version
 
 from fastapi import FastAPI
 
+from src.database import SessionLocal
 from src.exception_handlers import register_exception_handlers
+from src.load_data.initial_load import run_initial_load
 from src.routes.auth import router as auth_router
 from src.routes.health import router as health_router
 from src.routes.locations import router as location_router
 from src.routes.measurements import router as measurement_router
 from src.routes.metrics import router as metric_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Run one-time startup tasks, then hand control back to the app."""
+    db = SessionLocal()
+    try:
+        run_initial_load(db)
+    finally:
+        db.close()
+    yield
+
 
 try:
     app_version = version("weather-api")

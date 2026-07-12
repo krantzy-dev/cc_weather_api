@@ -1,10 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from src.config import settings
 from src.database import get_db
 from src.dependencies import get_current_user
+from src.load_data.backfill import backfill_location
 from src.models import Location, User
-from src.repositories import location_repository
+from src.repositories import location_repository, metric_repository
 from src.schemas.location import LocationCreate, LocationRead, LocationUpdate
 from src.services.location_service import ensure_location_is_far_enough
 
@@ -28,7 +30,20 @@ def create_location(
     existing_coordinates = location_repository.list_coordinates(db)
     ensure_location_is_far_enough(payload.lat, payload.lon, existing_coordinates)
 
-    return location_repository.create(db, payload.name, payload.lat, payload.lon)
+    location = location_repository.create(db, payload.name, payload.lat, payload.lon)
+
+    metric_ids_by_name = metric_repository.get_ids_by_name(db)
+    if metric_ids_by_name:
+        backfill_location(
+            db,
+            location.id,
+            location.lat,
+            location.lon,
+            metric_ids_by_name,
+            settings.forecast_days,
+        )
+
+    return location
 
 
 @router.get("", response_model=list[LocationRead])

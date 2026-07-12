@@ -43,3 +43,11 @@ def test_delete_metric_not_found(authenticated_client):
     """DELETE /metrics/{id} should 404 for a non-existent ID."""
     response = authenticated_client.delete("/metrics/999")
     assert response.status_code == 404
+
+
+def test_create_metric_rejects_unsupported_name(authenticated_client):
+    """POST /metrics should reject a name that isn't a real Open-Meteo variable."""
+    response = authenticated_client.post(
+        "/metrics", json={"name": "definitely_not_a_real_metric", "unit": "n/a"}
+    )
+    assert response.status_code == 422

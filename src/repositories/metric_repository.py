@@ -57,3 +57,29 @@ def delete(db: Session, metric: Metric) -> None:
     """
     db.delete(metric)
     db.commit()
+
+
+def get_by_name(db: Session, name: str) -> Metric | None:
+    """Retrieve a metric by its exact name.
+
+    Args:
+        db: Database session.
+        name: The metric name to look up.
+
+    Returns:
+        The matching metric, or None if no such metric exists.
+    """
+    return db.execute(select(Metric).where(Metric.name == name)).scalar_one_or_none()
+
+
+def get_ids_by_name(db: Session) -> dict[str, int]:
+    """Retrieve a mapping of metric name to metric_id for all existing metrics.
+
+    Args:
+        db: Database session.
+
+    Returns:
+        A dict mapping each metric's name to its ID.
+    """
+    rows = db.execute(select(Metric.name, Metric.id)).all()
+    return {row.name: row.id for row in rows}
