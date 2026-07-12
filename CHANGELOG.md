@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.3](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.2...v0.8.3) (2026-07-12)
+
+
+### Bug Fixes
+
+* **app:** refactor app version retrieval and adjust router inclusion order ([3a8250e](https://github.com/krantzy-dev/cc_weather_api/commit/3a8250e260aa9af9a45428047911418871528005))
+
 ## [0.8.2](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.1...v0.8.2) (2026-07-12)
 
 
