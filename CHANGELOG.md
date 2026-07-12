@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.4](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.3...v0.8.4) (2026-07-12)
+
+
+### Bug Fixes
+
+* **forecast:** enhance daily forecast ingestion with reference time and add simulation script ([ee43c02](https://github.com/krantzy-dev/cc_weather_api/commit/ee43c02d2eea264be79443558e4c4e8bd8c365d6))
+
 ## [0.8.3](https://github.com/krantzy-dev/cc_weather_api/compare/v0.8.2...v0.8.3) (2026-07-12)
 
 
